@@ -5,7 +5,12 @@
 
 #define SENSOR_NUMBER 0
 #define DEBUG 0
-#define SERVER_ADDRESS "HOST0"
+#define SENSOR0 "ççççç"
+#define SENSOR1 "ÂÂÂÂÂ"
+#define SENSOR2 "ÂÂÂÂÃ"
+#define SENSOR3 "ÂÂÂÂÄ"
+#define SENSOR4 "ÂÂÂÂÅ"
+#define SENSOR5 "ÂÂÂÂÆ"
 
 void setup(){
   Serial.begin(115200);
@@ -24,6 +29,8 @@ void setup(){
   
   //Configure reciving address.  
   Mirf.setRADDR((byte *)"serv1");
+  //writeRegister(RX_ADDR_P0,adr,mirf_ADDR_LEN);
+  //writeRegister(TX_ADDR,adr,mirf_ADDR_LEN);
   Mirf.setTADDR((byte *)"serv1");
   
   //configure auto ack
