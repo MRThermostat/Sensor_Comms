@@ -12,36 +12,33 @@ void setup(){
   Mirf.cePin = A4;
   Mirf.csnPin = A5;
   Mirf.spi = &MirfHardwareSpi;
-  
-  /*
-   * Setup pins / SPI.
-   */
-   
   Mirf.init();
   
-  /*
-   * Configure reciving address.
-   */
-   
-  Mirf.setRADDR((byte *)"serv1");
-  
-  /*
-   * Set the payload length to sizeof(unsigned long) the
-   * return type of millis().
-   *
-   * NB: payload on client and server must be the same.
-   */
-   
+  //Configure reciving address.
+  //using default addresses 
+
+  //set payload length 
   Mirf.payload = sizeof(int);
   
-  /*
-   * Write channel and payload config then power up reciver.
-   */
+  //configure auto ack
+  
+  
+  //configure power level
+  
+  
+  //configure data rate
+  
+  
+  //configure number of retries
+  
+  
+  //set channel 
+  //Mirf.channel = 10;
    
   Mirf.config();
-  
-  Serial.println("Listening..."); 
 }
+
+
 
 void loop(){
   /*
@@ -64,35 +61,17 @@ void loop(){
      * Get load the packet into the buffer.
      */
     uint8_t source = ((Mirf.getStatus() & 0b00001110) >> 1);
-    int adc_value = data[1];
+    Mirf.getData(data);
+    int adc_value = data[0];
     adc_value = adc_value << 8;
-    adc_value = adc_value | data[0];
+    adc_value = adc_value | data[1];
     
     Serial.print("adc sensor ");
     Serial.print(source);
     Serial.print(":");
     Serial.println(adc_value);
     
-    
-    /*
-     * Set the send address.
-     */
-     
-     
-    //Mirf.setTADDR((byte *)"clie1");
-    
-    /*
-     * Send the data back to the client.
-     */
-     
-    //Mirf.send(data);
-    
-    /*
-     * Wait untill sending has finished
-     *
-     * NB: isSending returns the chip to receving after returning true.
-     */
-      
-    Serial.println("Reply sent.");
+  }else{
+     //Mirf.printRegisterDetails(); 
   }
 }

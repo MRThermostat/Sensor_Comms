@@ -3,33 +3,35 @@
 #include <nRF24L01.h>
 #include <MirfHardwareSpiDriver.h>
 
-#define SENSOR_NUMBER 0
-#define DEBUG 0
-#define SERVER_ADDRESS "HOST0"
+#define SENSOR_NUMBER 1
+
+uint8_t SENSOR_ADDR[6][5] = {{231,231,231,231,231},{194,194,194,194,194},{194,194,194,194,195},{194,194,194,194,196},{194,194,194,194,197},{194,194,194,194,198}};
 
 void setup(){
   Serial.begin(115200);
-  #ifdef DEBUG=1
-  while(!Serial);
-  #endif 
   
   pinMode(TEMP_PIN,INPUT);
   
   Mirf.cePin = A4;
   Mirf.csnPin = A5;
-  
   Mirf.spi = &MirfHardwareSpi;
   Mirf.init();
   
-  
   //Configure reciving address.  
-  Mirf.setRADDR((byte *)"serv1");
-  Mirf.setTADDR((byte *)"serv1");
+  Mirf.setRADDR(SENSOR_ADDR[SENSOR_NUMBER]);
+  Mirf.setTADDR(SENSOR_ADDR[SENSOR_NUMBER]);
   
   //configure auto ack
+  
+  
   //configure power level
+  
+  
   //configure data rate
+  
+  
   //configure number of retries
+  
   
   //Set the payload length
   Mirf.payload = sizeof(int);
@@ -45,35 +47,25 @@ void setup(){
 
 void loop(){
   //unsigned long time = millis();
-  uint8_t adc_value = analogRead(TEMP_PIN);
+  int adc_value = analogRead(TEMP_PIN);
   Serial.print("adc value:");
   Serial.println(adc_value);
+  uint8_t buffer[2];
+  buffer[0] = (adc_value >> 8);
+  buffer[1] = (adc_value & 0b11111111);
   
-
+  //Mirf.printRegisterDetails();
   
   Mirf.powerUpRx();
-
-  Mirf.send(&adc_value);
+  
+  Mirf.send(buffer);
+  
+  //check for TX_DS to verify ACK
+  
   
   while(Mirf.isSending()){
   }
-  Serial.println("Finished sending");
-  /*delay(10);
-  while(!Mirf.dataReady()){
-    //Serial.println("Waiting");
-    if ( ( millis() - time ) > 1000 ) {
-      Serial.println("Timeout on response from server!");
-      return;
-    }
-  }
-  
-  Mirf.getData((byte *) &time);
-  
-  Serial.print("Ping: ");
-  Serial.println((millis() - time));
-  
-  delay(1000);
-  */
+  //Serial.println("Finished sending");
 } 
   
   
